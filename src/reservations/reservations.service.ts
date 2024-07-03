@@ -1,26 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import { Reservation } from './reservations.model';
 import { CreateReservationDto } from './dto/create-reservation.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Reservation } from './reservation.entity';
+import { Repository } from 'typeorm';
+import { Court } from 'src/courts/court.entity';
 
 @Injectable()
 export class ReservationsService {
-    private Reservations: Reservation[] = [];
+  constructor(
+    @InjectRepository(Reservation)
+    private reservationRepository: Repository<Reservation>,
+    @InjectRepository(Court) private courtRepository: Repository<Court>,
+  ) {}
 
-    getAllReservations(): Reservation[] {
-        return this.Reservations;
-    }
+  async getReservations(): Promise<Reservation[]> {
+    const reservations = await this.reservationRepository.find();
+    return reservations;
+  }
 
-    createReservation(createReservationDto: CreateReservationDto): Reservation {
-        const {court, user, reservationTime} = createReservationDto;
+  async createReservation(
+    createReservationDto: CreateReservationDto,
+  ): Promise<Reservation> {
+    const { user, courtId, reservationTime } = createReservationDto;
 
-        const reservation: Reservation = {
-            id: (this.Reservations.length + 1).toString(),
-            court,
-            user,
-            reservationTime: new Date(reservationTime),
-        };
+    const court = await this.courtRepository.findOneBy({ id: courtId });
 
-        this.Reservations.push(reservation);
-        return reservation;
-    }
+    const reservation = this.reservationRepository.create({
+      user,
+      court,
+      reservationTime,
+    });
+
+    await this.reservationRepository.save(reservation);
+
+    return reservation;
+  }
 }
