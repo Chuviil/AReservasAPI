@@ -3,11 +3,14 @@ import { ReservationsService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Reservation } from './reservation.entity';
-import { Court } from 'src/courts/court.entity';
+import { Space } from 'src/spaces/space.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Reservation]), TypeOrmModule.forFeature([Court])],
+  imports: [
+    TypeOrmModule.forFeature([Reservation]),
+    TypeOrmModule.forFeature([Space]),
+  ],
   providers: [ReservationsService],
-  controllers: [ReservationsController]
+  controllers: [ReservationsController],
 })
 export class ReservationsModule {}

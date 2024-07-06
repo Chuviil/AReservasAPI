@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Reservation } from '../reservations/reservation.entity';
 
 @Entity()
-export class Court {
+export class Space {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -12,6 +12,6 @@ export class Court {
   @Column()
   location: string;
 
-  @OneToMany(() => Reservation, (reservation) => reservation.court)
+  @OneToMany(() => Reservation, (reservation) => reservation.space)
   reservations: Reservation[];
 }

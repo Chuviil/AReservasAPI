@@ -1,16 +1,16 @@
-import { Court } from 'src/courts/court.entity';
+import { Space } from 'src/spaces/space.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Reservation {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
   user: string;
 
-  @ManyToOne(() => Court, (court) => court.reservations)
-  court: Court;
+  @ManyToOne(() => Space, (court) => court.reservations)
+  space: Space;
 
   @Column()
   reservationTime: Date;
